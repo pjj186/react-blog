@@ -9,6 +9,8 @@ app.use(async (ctx, next) => {
     ctx.status = 401; // Unauthorized
     return;
   }
+  // next가 반환하는 Promise는 다음에 처리해야 할 미들웨어가 끝나야 완료됨!
+  // 즉 아래에 console.log(2)를 해주는 미들웨어의 작업이 끝난 후 END가 호출됨
   await next();
   console.log("END");
 });
