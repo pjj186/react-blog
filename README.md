@@ -28,3 +28,37 @@
 ## async / await 사용하기
 
 - Koa는 async / await를 정식으로 지원하기 때문에 해당 문법을 아주 편하게 사용할 수 있음
+
+## koa-router 사용하기
+
+다음과 같이 사용한다.
+
+```
+const Koa = require("koa");
+const Router = require("koa-router");
+
+const app = new Koa();
+const router = new Router();
+
+// 라우터 설정
+router.get("/", (ctx) => {
+  ctx.body = "홈";
+});
+router.get("/about", (ctx) => {
+  ctx.body = "소개";
+});
+
+// app 인스턴스에 라우터 적용
+app.use(router.routes()).use(router.allowedMethods());
+
+app.listen(5000, () => {
+  console.log("Listening to port 5000");
+});
+
+```
+
+- router.get의 첫 번째 파라미터에는 라우트의 경로를 넣고, 두 번째 파라미터에는 해당 라우트에 적용할 미들웨어 함수를 넣는다.
+
+- 여기서 get 키워드는 해당 라우트에서 사용할 HTTP 메서드를 의미하고, get 대신에 post,put,delete 등을 넣을 수 있다!
+
+- Express와 유사한듯?
