@@ -115,3 +115,8 @@ app.listen(5000, () => {
     POST /posts/:id/comments|특정 포스트에 덧글 등록
     GET /posts/:id/comments|특정 포스트의 덧글 목록 조회
     DELETE /posts/:id/comments/:commentId|특정 포스트의 특정 덧글 삭제
+
+## koa-bodyparser
+
+- API 기능을 본격적으로 구현하기 전에 먼저 koa-bodyparser 미들웨어를 적용해야함.
+- 이 미들웨어는 POST/PUT/PATCH 같은 메서드의 Request Body에 JSON 형식으로 데이터를 넣어주면, 이를 파싱하여 서버에서 사용할 수 있게 해줌!

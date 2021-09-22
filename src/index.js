@@ -1,5 +1,7 @@
 const Koa = require("koa");
 const Router = require("koa-router");
+const bodyParser = require("koa-bodyparser");
+
 const api = require("./api");
 
 const app = new Koa();
@@ -9,6 +11,9 @@ const router = new Router();
 router.get("/", (ctx) => {
   ctx.body = "홈";
 });
+
+// 라우터 적용 전에 bodyParser 적용
+app.use(bodyParser());
 
 router.use("/api", api.routes()); // api 라우트 적용
 
