@@ -79,6 +79,7 @@ PUT /api/posts/:id
 exports.replace = (ctx) => {
   // PUT 메서드는 전체 포스트 정보를 입력하여 데이터를 통째로 교체할 때 사용한다.
   const { id } = ctx.params;
+  const { title, body } = ctx.request.body;
   // 해당 id를 가진 post가 몇 번째인지 확인한다.
   const index = posts.findIndex((p) => p.id.toString() === id);
   // 포스트가 없으면 오류를 반환한다.
@@ -92,7 +93,7 @@ exports.replace = (ctx) => {
   //  전체 객체를 덮어 씌운다.
   // 따라서 id를 제외한 기존 정보를 날리고, 객체를 새로 만든다.
   posts[index] = {
-    id,
+    id, // ...posts[index] 를 해주면, update와 똑같이 동작함
     ...ctx.request.body,
   };
   ctx.body = posts[index];
@@ -117,7 +118,7 @@ exports.update = (ctx) => {
   }
   // 기존 값에 정보를 덮어 씌웁니다.
   posts[index] = {
-    ...posts[index],
+    ...posts[index], // 이 부분을 PUT 메서드에서 했던것처럼 id로 바꾸면, PUT 요청은 입력된 필드정보를 제외한 나머지 필드는 사라지는데, PATCH는 남아있음
     ...ctx.request.body,
   };
   ctx.body = posts[index];
