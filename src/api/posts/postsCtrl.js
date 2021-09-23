@@ -1,5 +1,7 @@
 import Post from "../../models/post";
 import mongoose from "mongoose";
+import Joi from "joi";
+// Joi : 검증을 수월하게 해 주는 라이브러리
 
 const { ObjectId } = mongoose.Types;
 
@@ -14,6 +16,20 @@ export const checkObjectId = (ctx, next) => {
 };
 
 export const write = async (ctx) => {
+  const schema = Joi.object().keys({
+    // 객체가 다음 필드를 가지고 있음을 검증
+    title: Joi.string().required(), // required가 있으면 필수 항목 이라는 의미
+    body: Joi.string().required(),
+    tags: Joi.array().items(Joi.String()).required(),
+  });
+
+  // 검증하고 나서 검증 실패인 경우 에러 처리
+  const result = schema.validate(ctx.request.body);
+  if (result.error) {
+    ctx.status = 400; // Bad Request
+    ctx.body = result.error;
+    return;
+  }
   // 블로그 포스트를 작성하는 API
   const { title, body, tags } = ctx.request.body;
   const post = new Post({
@@ -69,6 +85,20 @@ export const remove = async (ctx) => {
 export const update = async (ctx) => {
   // 데이터 수정
   const { id } = ctx.params;
+  // write에서 사용한 schema와 비슷한데, required()가 없습니다.
+  const schema = Joi.object().keys({
+    title: Joi.string(),
+    body: Joi.string(),
+    tags: Joi.array().items(Joi.string()),
+  });
+
+  // 검증하고 나서 검증 실패인 경우 에러 처리
+  const result = schema.validate(ctx.request.body);
+  if (result.error) {
+    ctx.status = 400; // Bad
+    ctx.body = result.error;
+    return;
+  }
   try {
     const post = await Post.findByIdAndUpdate(id, ctx.request.body, {
       new: true, // 이 값을 설정하면 업데이트된 데이터를 반환합니다.
