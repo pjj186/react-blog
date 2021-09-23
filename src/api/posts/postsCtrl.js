@@ -42,6 +42,31 @@ export const read = async (ctx) => {
   }
 };
 
-export const remove = (ctx) => {};
+export const remove = async (ctx) => {
+  // 데이터 삭제
+  const { id } = ctx.params;
+  try {
+    await Post.findByIdAndRemove(id).exec();
+    ctx.statue = 204; // No Content (성공하기는 했지만 응답할 데이터 X)
+  } catch (e) {
+    ctx.throw(e);
+  }
+};
 
-export const update = (ctx) => {};
+export const update = async (ctx) => {
+  // 데이터 수정
+  const { id } = ctx.params;
+  try {
+    const post = await Post.findByIdAndUpdate(id, ctx.request.body, {
+      new: true, // 이 값을 설정하면 업데이트된 데이터를 반환합니다.
+      // false일 때는 업데이트되기 전의 데이터를 반환.
+    }).exec();
+    if (!post) {
+      ctx.status = 404;
+      return;
+    }
+    ctx.body = post;
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
