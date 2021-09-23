@@ -1,4 +1,17 @@
 import Post from "../../models/post";
+import mongoose from "mongoose";
+
+const { ObjectId } = mongoose.Types;
+
+export const checkObjectId = (ctx, next) => {
+  // id 값이 올바른 ObjectId 값인지 검증하는 미들웨어
+  const { id } = ctx.params;
+  if (!ObjectId.isValid(id)) {
+    ctx.status = 400; // Bad Request
+    return;
+  }
+  return next();
+};
 
 export const write = async (ctx) => {
   // 블로그 포스트를 작성하는 API
