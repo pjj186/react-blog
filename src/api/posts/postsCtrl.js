@@ -68,7 +68,13 @@ export const list = async (ctx) => {
     // find() 함수를 호출한 후에는 exec()를 붙여 주어야 서버에 쿼리를 요청함!
     const postCount = await Post.countDocuments().exec(); // countDocuments 메서드는 데이터베이스 컬렉션에 있는 데이터의 수를 세준다.
     ctx.set("Last-page", Math.ceil(postCount / 10)); // Last-page 라는 커스텀 HTTP 헤더를 설정
-    ctx.body = posts;
+    ctx.body = posts
+      .map((post) => post.toJSON())
+      .map((post) => ({
+        ...post,
+        body:
+          post.body.length < 200 ? post.body : `${post.body.slice(0, 200)}...`,
+      }));
   } catch (e) {
     ctx.throw(500, e);
   }
