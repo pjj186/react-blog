@@ -14,7 +14,6 @@ mongoose
   .connect(MONGO_URI, { useNewUrlParser: true })
   .then(() => {
     console.log("Connected to MongoDB");
-    createFakeData();
   })
   .catch((e) => {
     console.error(e);
