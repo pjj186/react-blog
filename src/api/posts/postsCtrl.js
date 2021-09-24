@@ -71,7 +71,8 @@ export const list = async (ctx) => {
     ctx.set("Last-page", Math.ceil(postCount / 10)); // Last-page 라는 커스텀 HTTP 헤더를 설정
     ctx.body = posts.map((post) => ({
       ...post,
-      body: post.body.length < 200 ? post.body : `${post.body.slice(0, 200)}`,
+      body:
+        post.body.length < 200 ? post.body : `${post.body.slice(0, 200)}...`,
     }));
   } catch (e) {
     ctx.throw(500, e);
