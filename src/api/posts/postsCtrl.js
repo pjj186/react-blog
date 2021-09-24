@@ -47,11 +47,24 @@ export const write = async (ctx) => {
 
 export const list = async (ctx) => {
   // 데이터 조회
+
+  // query는 문자열이기 때문에 숫자로 변환
+  // 값이 주어지지 않았다면 1을 기본으로 사용
+  const page = parseInt(ctx.query.page || "1", 10);
+
+  if (page < 1) {
+    ctx.status = 400;
+    return;
+  }
   try {
     // 데이터를 역순으로 조회하려면 exec()를 하기전에 sort() 구문을 넣어준다.
     // sort 함수의 파라미터는 {key : 1} 형식으로 넣는데, key는 정렬할 필드를 설정하는 부분이고 오른쪽 값을 1로 섲렁하면 오름차순, -1로 설정하면 내림차순으로 정렬한다.
     // _id를 내림차순으로 정렬하고싶으니 _id 필드를 -1로 설정
-    const posts = await Post.find().sort({ _id: -1 }).limit(10).exec();
+    const posts = await Post.find()
+      .sort({ _id: -1 })
+      .limit(10)
+      .skip((page - 1) * 10)
+      .exec();
     // find() 함수를 호출한 후에는 exec()를 붙여 주어야 서버에 쿼리를 요청함!
     ctx.body = posts;
   } catch (e) {
