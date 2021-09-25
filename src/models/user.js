@@ -18,6 +18,10 @@ UserSchema.methods.checkPassword = async function (password) {
   return result; // true / false
 };
 
+UserSchema.statics.findByUsername = function (username) {
+  return this.findOne({ username }); // 스테틱 함수에서의 this는 모델을 가르킨다. 따라서 지금 여기서는 User를 가르킴!
+};
+
 const User = mongoose.model("User", UserSchema);
 
 export default User;
