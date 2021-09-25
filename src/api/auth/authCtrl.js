@@ -92,4 +92,7 @@ export const check = async (ctx) => {
 
 export const logout = async (ctx) => {
   // 로그아웃
+  ctx.cookies.set("access_token"); // 쿠키를 지워 주는 동작, (두번 째 파라미터를 넣지 않음으로써 빈 토큰을 쿠키에 set 해주는거임!)
+  // Set-Cookie 헤더를 보면 access_token이 비워지는걸 확인할 수 있음!
+  ctx.status = 204; // No Content
 };
