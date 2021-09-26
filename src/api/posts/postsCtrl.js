@@ -79,6 +79,7 @@ export const list = async (ctx) => {
   }
   const { tag, username } = ctx.query;
   // tag, username 값이 유효하면 객체 안에 넣고, 그렇지 않으면 넣지 않음
+  // 특정 사용자가 작성한 포스트만 조회하거나 특정 태그가 있는 포스트만 조회하는 기능을 위해 query 객체를 다음과같이 만들고 find함수, countDocuments함수의 파라미터로 전달해줌
   const query = {
     ...(username ? { "user.username": username } : {}),
     ...(tag ? { tags: tag } : {}),
