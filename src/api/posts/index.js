@@ -6,8 +6,8 @@ const posts = new Router();
 
 posts.get("/", postsCtrl.list);
 posts.post("/", checkLoggedIn, postsCtrl.write);
-posts.get("/:id", postsCtrl.read);
-posts.delete("/:id", checkLoggedIn, postsCtrl.remove);
-posts.patch("/:id", checkLoggedIn, postsCtrl.update);
+posts.get("/:id", postsCtrl.checkObjectId, postsCtrl.read);
+posts.delete("/:id", postsCtrl.checkObjectId, checkLoggedIn, postsCtrl.remove);
+posts.patch("/:id", postsCtrl.checkObjectId, checkLoggedIn, postsCtrl.update);
 
 export default posts;
