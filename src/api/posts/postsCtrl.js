@@ -5,7 +5,7 @@ import Joi from "joi";
 
 const { ObjectId } = mongoose.Types;
 
-export const getPostById = (ctx, next) => {
+export const getPostById = async (ctx, next) => {
   // id 값이 올바른 ObjectId 값인지 검증하는 미들웨어
   const { id } = ctx.params;
   if (!ObjectId.isValid(id)) {
@@ -24,11 +24,9 @@ export const getPostById = (ctx, next) => {
   } catch (e) {
     ctx.throw(500, e);
   }
-  return next();
 };
 
 export const checkOwnPost = (ctx, next) => {
-  // id로 찾은 포스트가 로그인 중인 사용자가 작성한 포스트인지 확인
   const { user, post } = ctx.state;
   if (post.user._id.toString() !== user._id) {
     ctx.status = 403;
@@ -79,18 +77,25 @@ export const list = async (ctx) => {
     ctx.status = 400;
     return;
   }
+  const { tag, username } = ctx.query;
+  // tag, username 값이 유효하면 객체 안에 넣고, 그렇지 않으면 넣지 않음
+  const query = {
+    ...(username ? { "user.username": username } : {}),
+    ...(tag ? { tags: tag } : {}),
+  };
+  console.log(query);
   try {
     // 데이터를 역순으로 조회하려면 exec()를 하기전에 sort() 구문을 넣어준다.
     // sort 함수의 파라미터는 {key : 1} 형식으로 넣는데, key는 정렬할 필드를 설정하는 부분이고 오른쪽 값을 1로 섲렁하면 오름차순, -1로 설정하면 내림차순으로 정렬한다.
     // _id를 내림차순으로 정렬하고싶으니 _id 필드를 -1로 설정
-    const posts = await Post.find()
+    const posts = await Post.find(query)
       .sort({ _id: -1 })
       .limit(10)
       .skip((page - 1) * 10)
       .lean()
       .exec();
     // find() 함수를 호출한 후에는 exec()를 붙여 주어야 서버에 쿼리를 요청함!
-    const postCount = await Post.countDocuments().exec(); // countDocuments 메서드는 데이터베이스 컬렉션에 있는 데이터의 수를 세준다.
+    const postCount = await Post.countDocuments(query).exec(); // countDocuments 메서드는 데이터베이스 컬렉션에 있는 데이터의 수를 세준다.
     ctx.set("Last-page", Math.ceil(postCount / 10)); // Last-page 라는 커스텀 HTTP 헤더를 설정
     ctx.body = posts.map((post) => ({
       ...post,

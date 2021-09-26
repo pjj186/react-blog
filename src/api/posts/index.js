@@ -11,14 +11,14 @@ posts.delete(
   "/:id",
   postsCtrl.getPostById,
   checkLoggedIn,
-  checkOwnPost,
+  postsCtrl.checkOwnPost,
   postsCtrl.remove
 );
 posts.patch(
   "/:id",
   postsCtrl.getPostById,
   checkLoggedIn,
-  checkOwnPost,
+  postsCtrl.checkOwnPost,
   postsCtrl.update
 );
 
