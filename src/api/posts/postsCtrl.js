@@ -27,6 +27,7 @@ export const getPostById = async (ctx, next) => {
 };
 
 export const checkOwnPost = (ctx, next) => {
+  // id로 찾은 포스트가 로그인 중인 사용자가 작성한 포스트인지 확인
   const { user, post } = ctx.state;
   if (post.user._id.toString() !== user._id) {
     ctx.status = 403;
