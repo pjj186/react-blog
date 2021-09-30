@@ -15,12 +15,12 @@ export const register = async (ctx) => {
     return;
   }
 
-  const { username, password } = ctx.request.body;
+  const { username, password } = ctx.request.body; // 프론트쪽에서 보낸 데이터
   try {
     // username이 이미 존재하는지 확인
     const exists = await User.findByUsername(username);
     if (exists) {
-      ctx.status = 400; // Conflict
+      ctx.status = 409; // Conflict
       return;
     }
 
@@ -46,7 +46,7 @@ export const register = async (ctx) => {
 
 export const login = async (ctx) => {
   // 로그인
-  const { username, password } = ctx.request.body;
+  const { username, password } = ctx.request.body; // post 요청과 함께 들어온 데이터들
 
   // username, password가 없으면 에러 처리
   if (!username || !password) {
@@ -81,6 +81,8 @@ export const login = async (ctx) => {
 
 export const check = async (ctx) => {
   // 로그인 상태 확인
+  // 토큰안에 들어있는 state를 확인하고, 그 안에 있는 정보를 가져옴
+  // _id와 username이 들어가있음
   const { user } = ctx.state; // const user = ctx.state.user
   if (!user) {
     // 로그인 중 아님
