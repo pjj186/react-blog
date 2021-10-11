@@ -89,7 +89,7 @@ export const check = async (ctx) => {
     ctx.status = 401; // Unauthorized
     return;
   }
-  ctx.body = user;
+  ctx.body = user; // _id , username
 };
 
 export const logout = async (ctx) => {
