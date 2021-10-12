@@ -152,7 +152,8 @@ export const remove = async (ctx) => {
   const { id } = ctx.params;
   try {
     await Post.findByIdAndRemove(id).exec();
-    ctx.statue = 204; // No Content (성공하기는 했지만 응답할 데이터 X)
+    ctx.status = 204; // No Content (성공하기는 했지만 응답할 데이터 X)
+    console.log("remove");
   } catch (e) {
     ctx.throw(e);
   }
