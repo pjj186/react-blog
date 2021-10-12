@@ -25,11 +25,6 @@ mongoose
 const app = new Koa();
 const router = new Router();
 
-// 라우터 설정
-router.get("/", (ctx) => {
-  ctx.body = "홈";
-});
-
 // 라우터 적용 전에 bodyParser 적용
 app.use(bodyParser());
 app.use(jwtMiddleware);
