@@ -119,7 +119,6 @@ export const list = async (ctx) => {
     ...(username ? { "user.username": username } : {}),
     ...(tag ? { tags: tag } : {}),
   };
-  console.log(query);
   try {
     // 데이터를 역순으로 조회하려면 exec()를 하기전에 sort() 구문을 넣어준다.
     // sort 함수의 파라미터는 {key : 1} 형식으로 넣는데, key는 정렬할 필드를 설정하는 부분이고 오른쪽 값을 1로 섲렁하면 오름차순, -1로 설정하면 내림차순으로 정렬한다.
